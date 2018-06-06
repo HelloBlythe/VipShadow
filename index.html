@@ -1,55 +1,116 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
-<title>来福影院</title>
-<script type="text/javascript">
-		function is_weixin() {
-		    var ua = navigator.userAgent.toLowerCase();
-		    if (ua.match(/MicroMessenger/i) == "micromessenger") {
-		        return true;
-		    } else {
-		        return false;
-		    }
-		}
-		var isWeixin = is_weixin();
-		var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight;
-		console.log(winHeight);
-		function loadHtml(){
-			var div = document.createElement('div');
-			div.id = 'weixin-tip';
-			div.innerHTML = '<p><img src="http://caibaojian.com/demo/2015/3/register/img/live_weixin.png" alt="微信打开"/>              ';
-			document.body.appendChild(div);
-		}
-		
-		function loadStyleText(cssText) {
-	        var style = document.createElement('style');
-	        style.rel = 'stylesheet';
-	        style.type = 'text/css';
-	        try {
-	            style.appendChild(document.createTextNode(cssText));
-	        } catch (e) {
-	            style.styleSheet.cssText = cssText; //ie9以下
-	        }
-            var head=document.getElementsByTagName("head")[0]; //head标签之间加上style样式
-            head.appendChild(style); 
-	    }
-	    var cssText = "#weixin-tip{position: fixed; left:0; top:0; background: rgba(0,0,0,0.8); filter:alpha(opacity=80); width: 100%; height:100%; z-index: 100;} #weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%;}";
-		if(isWeixin){
-			loadHtml();
-			loadStyleText(cssText);
-		}
-	</script>
-<style type="text/css">
- .kz-ad-layer{display: none}
- .kzpc-footer {display: none}
- .kz-footer {display: none;}
- .jump-2-store {display: none;}
+<meta charset="UTF-8">
+<meta content="width=device-width,user-scalable=no" name="viewport">
+<title>璇峰湪娴忚鍣ㄦ墦寮�瑙傜湅...</title>
+<style>
+body {
+  background: #EEE;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  background-size: 100%;
+}
+.container_2 img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+.modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: rgba(0,0,0,.7);
+  z-index: 1;
+  display: none;
+}
+.show {
+  display: block;
+}
+#guide {
+  width: 100%;
+  height: 400px;
+  background-size: 320px 400px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+.ios {
+  background: url(https://xcx.xiaoanbang.cn/images/jump-ios.png) no-repeat center top;
+  background-size: 100% 100% !important;
+}
+.android {
+  background: url(https://xcx.xiaoanbang.cn/images/jump-android.png) no-repeat center top;
+  background-size: 100% 100% !important;
+}
 </style>
-	
 </head>
-
 <body>
+<div class="container_2"><img src="https://xcx.xiaoanbang.cn/images/3.22.jpg"></div>
+<div class="modal" id="modal"></div>
+<div id="guide" class="guide"></div>
+<iframe frameborder="0" id="ifr" style="display: none;" src="javascript:void(0)"></iframe>
+<script type="text/javascript">
+(function (window, doc) {
+  function localParam(search, hash) {
+    search = search || window.location.search;
+    hash = hash || window.location.hash;
+    var fn = function (str, reg) {
+      if (str) {
+        var data = {};
+        str.replace(reg, function ($0, $1, $2, $3) {
+          data[$1] = $3;
+        });
+        return data;
+      }
+    }
+    return {
+      search: fn(search, new RegExp("([^?=&]+)(=([^&]*))?", "g")) || {},
+      hash: fn(hash, new RegExp("([^#=&]+)(=([^&]*))?", "g")) || {}
+    };
+  }
 
+  var isAndroid = navigator.userAgent.match(/android/ig),
+    isIos = navigator.userAgent.match(/iphone|ipod/ig),
+    isIpad = navigator.userAgent.match(/ipad/ig),
+    isWeixin = (/MicroMessenger/ig).test(navigator.userAgent),
+    params = localParam(),
+    isTianya = params.search['tianya'],
+    isappinstalled = params.search['isappinstalled'] || params.search['appinstall'],
+    openurl = decodeURIComponent(params.search['openurl'] + window.location.hash),
+    iframe = document.getElementById('ifr');
 
+  window.onload = function () {
+    var iosCls = 'ios',
+      androidCls = 'android',
+      EL = document.getElementById("guide");
 
-</body></html>
+    if ((isIos || isIpad) && !isAndroid) {
+      document.getElementById("modal").classList.add("show");
+      EL.classList.add(iosCls);
+    } else if (isAndroid) {
+      document.getElementById("modal").classList.add("show");
+      EL.classList.add(androidCls);
+    }
+
+    if (!isWeixin) {
+      if (isappinstalled && isappinstalled == '1') {
+        //iframe.src = openurl;
+        window.location = openurl;
+      } else {
+        window.location = openurl;
+      }
+    }
+  }
+})(window, document);
+</script>
+</body>
+</html>
